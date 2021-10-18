@@ -11,6 +11,16 @@ module.exports = {
         "migration/away-from-st"
       ],
     },
+    {
+      type: 'category',
+      label: 'Multi-tenant',
+      items: [
+        "multi-tenant/about",
+        "multi-tenant/core",
+        "multi-tenant/backend",
+        "multi-tenant/frontend"
+      ],
+    },
     "compatibility-table",
     "sdks",
     "apis"
