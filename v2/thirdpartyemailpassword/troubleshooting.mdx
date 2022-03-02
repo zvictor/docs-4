@@ -1,0 +1,78 @@
+---
+id: troubleshooting
+title: Troubleshooting
+hide_title: true
+---
+
+# Troubleshooting
+
+The following section will try and help you debug common session related issues when setting up SuperTokens in your app. If you can not find a solution in this section click here to reach out to us on discord with your questions.
+
+:::important
+Try using the latest versions of the SuperTokens SDKs, the issue you are facing could be resolved in a newer version of the SDK.
+:::
+
+## Common Issues:
+### Are you using the correct recipe library?
+- When you are setting up SuperTokens in your app make sure you have correctly imported and initialized the relevant recipies. 
+- Initializing the wrong recipes in your backend and frontend can result in the SuperTokens Auth related APIs not working and the incorrect UI being rendered. 
+- If you are following the quick setup from this recipe make sure both your frontend and backend are using the `^{recipeNameCapitalLetters}` and `Session` recipe.
+
+### Check that you have correctly initialized SuperTokens on your frontend
+- When calling `SuperTokens.init` on your frontend make sure that it is initialized in the global scope i.e. before any SuperTokens related function is called. 
+- Not doing so can result in the SuperTokens interceptor not correctly applying the auth headers to your requests and sessions not automatically refreshing.
+
+### Have you correctly set the `apiDomain` value in the frontend
+- If the `apiDomain` value set in your frontend config doesn't match your actual API domain,the SuperTokens frontend interceptor will not be called. 
+- This will result in requests to protected routes on your backend returning a `401 UNAUTHORIZED` error.  
+
+### Are the access control expose headers being correctly set?
+- If the access control expose headers are not correctly set, the frontend will not be able to read the `id-refresh-token`. 
+- This will result in the frontend not being able to set the session state.
+
+### Is you frontend and backend running on different top level domains?
+If your frontend and backend both have different top level domains(your frontend domain is `example1.com` and your backend domain is `example2.com`), SuperTokens will set the `sameSite` value to `none` to allow cookies to be added to third party requests but this requires a secure connection. If you are not using `https` then the auth cookies will not get set on your frontend and auth requests will result in a `401 UNAUTHORIZED`. There is also a known issue with safari not sending the cookies even if `sameSite` is `none`, you can learn more about this issue and some solutions over [here](./common-customizations/sessions/in-iframe#a-note-on-safari-and-chrome-incognito-mode-only)
+
+### Are you embedding you website in an Iframe?
+- If you are embedding your website in an iframe to be consumed by other sites, you will need to enable the `setInIframe` config value during `Session.init` on the frontend. 
+- You will also need to use `https` during development for this to work.
+- You can learn more about how to use this feature [here](./common-customizations/sessions/in-iframe) 
+
+### Are you using a custom interceptor?
+Adding custom interceptors can result in the refresh API not being called.
+
+### Access-control-allow-origin set to * which prevents browser from using setCredentials: true. ANd if setCredentials is false, then cookies are not sent.
+
+
+### anti-csrf not being provided
+
+
+## Reach out to us on Discord
+
+If your issue continues to persist even after trying some of the fixs listed over here you can reach out to us on [Discord](https://supertokens.com/discord) and ask us questions on the **#support-questions** channel. Please include the following answers when posting your question:
+
+```
+A description of what your issue is:
+Example: When sending requests from my frontend to a protected route on my backend I am getting a 401 UNAUTHORIZED error.
+
+Which SDKs are you using (with versions):
+Example: supertokens-node@8.6.0 and supertokens-auth-react@0.18
+
+What recipes are you using:
+Example:
+    Frontend: ThirdPartyEmailPassword, Sessions
+    Backend:  ThirdPartyEmailPassword, Sessions
+
+
+How have you setup SuperTokens ? (What framework are you using? What are your frontend and backend configs)
+TODO:
+Example:
+
+    Frontend: React app
+    Backend: Node server with express 
+
+    frontendConfig = {...} // add your frontend config here
+    backendConfig = {...} // add your backend config here
+
+```
+

@@ -428,6 +428,7 @@ module.exports = {
         }
       ],
     },
+    "troubleshooting",
     "appinfo",
     "sdks",
     "apis",
